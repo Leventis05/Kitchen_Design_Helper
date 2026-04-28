@@ -29,15 +29,14 @@ will extract the model name if only image is given PLUS our ability to find the 
 
 ## Useful Data:
 
-## Links
+### Links
 - [Manuals Database](https://www.manualslib.com/)
 - [Installation Guide](https://youtu.be/dQw4w9WgXcQ?si=75LoIrzOCJ3Uac2z)
 
-## .rodata
+### .rodata
 ```
 μειλ με φωτο προσφορα απο τον κωτσοβολο/φωτο απο μια συσκευη κατευθειαν απο manufacturer
 autorecognize μοντελο/κωδικο απο φωτο
-
 
 εικονα τοποθετησης για να καταλαβεις (autorecognize)
 πληρους εντοιχισμου vs εμφανες καντράν
