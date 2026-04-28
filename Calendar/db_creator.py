@@ -12,6 +12,14 @@ names = [
     "Virtue", "Journey", "Relentless", "Despair", "Hope", "Chant"
 ]
 
+desgn = [
+    "Thewraek stillmight", "Virgolor feathercrown",
+    "Trakian boldgaze", "Ralofir oceancrown",
+    "Farris nightsong", "Sylhorn irindromin",
+    "Virmaer altont", "Ropeiros teliscophir",
+    "Elqen custrahish", "Keanorin drathrerrann"
+]
+
 pending_s = ["a", "b", "c"]
 
 conn = sqlite3.connect("test.db")
@@ -20,17 +28,17 @@ cursor = conn.cursor()
 ran.seed(time.time())
 
 cursor.execute("""
-CREATE TABLE IF NOT EXISTS users (
-    id          INTEGER PRIMARY KEY AUTOINCREMENT,
-    name        TEXT,
-    age         INTEGER,
-    date_added  TEXT,
-    deadline    TEXT,
-    pending     TEXT
+CREATE TABLE IF NOT EXISTS kitchens (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    client          TEXT,
+    designer        TEXT,
+    accept_date     TEXT,
+    deadline        TEXT,
+    pending         TEXT
 )
 """)
 
-cursor.execute("DELETE FROM users")  # reset data (optional)
+cursor.execute("DELETE FROM kitchens")  # reset data (optional)
 
 for name in names:
     dt = radar.random_datetime()
@@ -41,9 +49,12 @@ for name in names:
 
     pend = ", ".join(ran.choices(pending_s, k=ran.randint(1, 3)))
 
+    des = ran.choice(desgn)
+
     cursor.execute(
-        "INSERT INTO users (name, age, date_added, deadline, pending) VALUES (?, ?, ?, ?, ?)",
-        (name, ran.randint(10, 70), date, deadline, pend)
+        """INSERT INTO kitchens (client, designer, accept_date, deadline, pending) 
+            VALUES (?, ?, ?, ?, ?)""",
+            (name, des, date, deadline, pend)
                 )
 
 
