@@ -27,17 +27,6 @@ cursor = conn.cursor()
 
 ran.seed(time.time())
 
-# cursor.execute("""
-# CREATE TABLE IF NOT EXISTS kitchens (
-#     id              INTEGER PRIMARY KEY AUTOINCREMENT,
-#     client          TEXT,
-#     designer        TEXT,
-#     accept_date     TEXT,
-#     deadline        TEXT,
-#     pending         TEXT
-# )
-# """)
-
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS kitchens (
     id              INTEGER PRIMARY KEY AUTOINCREMENT,
