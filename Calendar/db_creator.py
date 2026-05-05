@@ -27,36 +27,49 @@ cursor = conn.cursor()
 
 ran.seed(time.time())
 
+# cursor.execute("""
+# CREATE TABLE IF NOT EXISTS kitchens (
+#     id              INTEGER PRIMARY KEY AUTOINCREMENT,
+#     client          TEXT,
+#     designer        TEXT,
+#     accept_date     TEXT,
+#     deadline        TEXT,
+#     pending         TEXT
+# )
+# """)
+
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS kitchens (
     id              INTEGER PRIMARY KEY AUTOINCREMENT,
-    client          TEXT,
-    designer        TEXT,
-    analyses_date   TEXT,
-    approval_date   TEXT,
-    status          TEXT,
-    pending         TEXT
+    client              TEXT,
+    designer            TEXT,
+    analysis_date       TEXT,
+    certification_date  TEXT,
+    pending             TEXT,
+    checklist           BIT
 )
 """)
 
 cursor.execute("DELETE FROM kitchens")  # reset data (optional)
 
 for name in names:
-    dt = radar.random_datetime()
-    date = dt.strftime("%d-%m-%Y")
+    an = radar.random_datetime()
+    analysis = an.strftime("%d-%m-%Y")
 
-    dl = dt + timedelta(days=30)
-    deadline = dl.strftime("%d-%m-%Y")
+    crt = an + timedelta(days=30)
+    certifiation = crt.strftime("%d-%m-%Y")
 
     pend = ", ".join(ran.choices(pending_s, k=ran.randint(1, 3)))
 
     des = ran.choice(desgn)
 
+    checklst = ran.choice([0, 1])
+
     cursor.execute(
-        """INSERT INTO kitchens (client, designer, analyses_date, approval_date, status, pending) 
+        """INSERT INTO kitchens (client, designer, analysis_date, certification_date, pending, checklist) 
             VALUES (?, ?, ?, ?, ?, ?)""",
-            (name, des, date, deadline, pend)
-            )
+            (name, des, analysis, certifiation, pend, checklst)
+                )
 
 
 conn.commit()
