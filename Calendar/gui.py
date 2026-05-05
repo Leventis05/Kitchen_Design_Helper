@@ -54,7 +54,7 @@ class DateDelegate(QStyledItemDelegate):
         editor.setDate(date)
 
     def setModelData(self, editor, all_model, index):
-        date = editor.date().toString("yyyy-MM-dd")
+        date = editor.date().toString("dd-MM-yyyy")
         all_model.setData(index, date)
 
 
@@ -162,6 +162,7 @@ if __name__ == "__main__":
     tabs.currentChanged.connect(lambda i: resize_all() if i == 1 else None)
 
     tabs.addTab(reminder_tab, "Reminders")
+    update_badge()
     tabs.currentChanged.connect(lambda i: refresh_reminders() if i == 1 else None)
     tabs.currentChanged.connect(lambda i: resize_rem() if i == 1 else None)
 

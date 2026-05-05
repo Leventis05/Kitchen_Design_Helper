@@ -32,8 +32,9 @@ CREATE TABLE IF NOT EXISTS kitchens (
     id              INTEGER PRIMARY KEY AUTOINCREMENT,
     client          TEXT,
     designer        TEXT,
-    accept_date     TEXT,
-    deadline        TEXT,
+    analyses_date   TEXT,
+    approval_date   TEXT,
+    status          TEXT,
     pending         TEXT
 )
 """)
@@ -52,10 +53,10 @@ for name in names:
     des = ran.choice(desgn)
 
     cursor.execute(
-        """INSERT INTO kitchens (client, designer, accept_date, deadline, pending) 
-            VALUES (?, ?, ?, ?, ?)""",
+        """INSERT INTO kitchens (client, designer, analyses_date, approval_date, status, pending) 
+            VALUES (?, ?, ?, ?, ?, ?)""",
             (name, des, date, deadline, pend)
-                )
+            )
 
 
 conn.commit()
