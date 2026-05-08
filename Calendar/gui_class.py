@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from PyQt5.QtSql import QSqlTableModel
-from PyQt5.QtWidgets import QApplication, QVBoxLayout, QTableView, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QApplication, QVBoxLayout, QTableView, QVBoxLayout, QWidget, QCalendarWidget
 from PyQt5.QtWidgets import QTabWidget
 from PyQt5.QtCore import QSortFilterProxyModel
 from typing import Callable, Optional
@@ -42,6 +42,15 @@ class K_GUI:
         self.tabs.addTab(newTab, header)
         # Calling func(model_tuple, vw_lout_tuple, tab, index)
         configFunc(self.models[name], (self.views[name], self.layouts[name]), self.tabs)
+
+    def add_calendar(self, configFunc : Optional[Callable] = None):
+        self.calendar_tab = QWidget()
+        self.calendar_layout = QVBoxLayout(self.calendar_tab)
+
+        self.calendar = QCalendarWidget()
+        self.calendar_layout.addWidget(self.calendar)
+
+        self.tabs.addTab(self.calendar_tab, "Ημερολόγιο")
 
     def exec(self):
         self.tabs.resize(1000, 700)
