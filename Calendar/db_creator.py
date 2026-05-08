@@ -3,6 +3,7 @@ import random as ran
 import time
 from datetime import timedelta
 import radar
+from pathlib import Path
 
 names = [
     "Ralvenom", "Andmos", "Caslius", "Mavichar", "Ben", "Uka",
@@ -22,7 +23,12 @@ desgn = [
 
 pending_s = ["υλικά", "πάγκος", "συσκευές"]
 
-conn = sqlite3.connect("test.db")
+
+db_path = Path.home() / "desktop" / "KITCHEN" / "Kitchen_Design_Helper" / "Calendar" / "test.db"
+db_path.parent.mkdir(exist_ok=True)
+
+conn = sqlite3.connect(str(db_path))
+
 cursor = conn.cursor()
 
 ran.seed(time.time())

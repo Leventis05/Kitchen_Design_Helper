@@ -16,10 +16,10 @@ class mdl_init_funcs:
         model.setTable(api.DB_MAIN_TABLE)   # table name
         model.select()            # load data
         model.setEditStrategy(QSqlTableModel.OnFieldChange)
-        model.setHeaderData(1, Qt.Horizontal, "Πελάτης")
-        model.setHeaderData(2, Qt.Horizontal, "Σχεδιαστής")
-        model.setHeaderData(3, Qt.Horizontal, "Ημ/νία Αποδοχής")
-        model.setHeaderData(4, Qt.Horizontal, "Ημ/νία Παράδωσης")
+        model.setHeaderData(1, Qt.Horizontal, "Ονοματεπώνυμο Πελάτη")
+        model.setHeaderData(2, Qt.Horizontal, "Ονοματεπώνυμο Σχεδιαστή")
+        model.setHeaderData(3, Qt.Horizontal, "Ημερομηνία Αποδοχής")
+        model.setHeaderData(4, Qt.Horizontal, "Ημερομηνία Παράδοσης")
         model.setHeaderData(5, Qt.Horizontal, "Εκκρεμότητες")
 
         proxy.setSourceModel(model)
@@ -28,10 +28,10 @@ class mdl_init_funcs:
 
     def rem_short_init(model : QSqlTableModel, proxy : Optional[QSortFilterProxyModel]):
         model.setTable(api.DB_MAIN_TABLE)
-        model.setHeaderData(1, Qt.Horizontal, "Πελάτης")
-        model.setHeaderData(2, Qt.Horizontal, "Σχεδιαστής")
-        model.setHeaderData(3, Qt.Horizontal, "Ημ/νία Αποδοχής")
-        model.setHeaderData(4, Qt.Horizontal, "Ημ/νία Παράδωσης")
+        model.setHeaderData(1, Qt.Horizontal, "Ονοματεπώνυμο Πελάτη")
+        model.setHeaderData(2, Qt.Horizontal, "Ονοματεπώνυμο Σχεδιαστή")
+        model.setHeaderData(3, Qt.Horizontal, "Ημερομηνία Αποδοχής")
+        model.setHeaderData(4, Qt.Horizontal, "Ημερομηνία Παράδοσης")
         model.setHeaderData(5, Qt.Horizontal, "Εκκρεμότητες")
         hks.refresh_reminders_short(model)
 
