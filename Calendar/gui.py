@@ -3,6 +3,7 @@ from dataclasses import dataclass
 import gui_class as kgui
 import init_funcs as init
 
+import db_api
 
 class Keys:
     MAIN = "main"
@@ -42,6 +43,11 @@ def gui_insert_tabs(gui : kgui.K_GUI):
 
 # MAIN
 def main():
+
+    # api1 = db_api.api()
+
+    # api1.select_all()
+
     gui = kgui.K_GUI()
 
     gui_insert_models(gui)
@@ -50,12 +56,9 @@ def main():
     gui_insert_tabs(gui)
 
     gui.exec()
+
+    
     
 
 if __name__ == "__main__":
     main()
-    
-    
-
-
-

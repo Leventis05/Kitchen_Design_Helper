@@ -37,14 +37,15 @@ def update_badge(model : QSqlTableModel, tabs : QTabWidget):
     count = model.rowCount()
     tabs.setTabText(1, f"Reminders ({count})")
 
-def refresh_reminders_short(model : QSqlTableModel, tabs : Optional[QTabWidget]):
+def refresh_reminders_short(model : QSqlTableModel, tabs : Optional[QTabWidget] = None):
     today = QDate.currentDate()
     two_days_later = today.addDays(2)
 
     start = today.toString("yyyy-MM-dd")
     end = two_days_later.toString("yyyy-MM-dd")
 
-    col = api.DB_TABLE_COL[4]
+    columns = api.columns
+    col = api.DB_TABLE_COL[columns.CERT_DATE]
     model.setFilter(f"{col} BETWEEN '{start}' AND '{end}'")
 
     model.setFilter(f"{col} BETWEEN '{start}' AND '{end}'")

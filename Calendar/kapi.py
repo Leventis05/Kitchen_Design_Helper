@@ -1,5 +1,5 @@
 from PyQt5.QtSql import QSqlDatabase, QSqlTableModel
-from PyQt5.QtWidgets import QStyledItemDelegate, QDateEdit,  QLineEdit, QMessageBox, QTabWidget
+from PyQt5.QtWidgets import QStyledItemDelegate, QDateEdit,  QComboBox
 from PyQt5.QtCore import QDate, QSortFilterProxyModel, Qt
 from enum import Enum
 
@@ -68,3 +68,33 @@ class DateDelegate(QStyledItemDelegate):
     def setModelData(self, editor, all_model, index):
         date = editor.date().toString(DB_FORMAT)
         all_model.setData(index, date)
+
+
+class PendingDelegate(QStyledItemDelegate):
+    def createEditor(self, parent, option, index):
+        editor = QComboBox(parent)
+
+        # Add choices
+        editor.addItems([
+            "a",
+            "b",
+            "c",
+            "a, b",
+            "a, c",
+            "b, c",
+            "a, b, c"
+        ])
+
+        return editor
+
+    def setEditorData(self, editor, index):
+        value = index.model().data(index)
+
+        idx = editor.findText(value)
+
+        if idx >= 0:
+            editor.setCurrentIndex(idx)
+
+    def setModelData(self, editor, model, index):
+        value = editor.currentText()
+        model.setData(index, value)

@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS kitchens (
     analysis_date       TEXT,
     certification_date  TEXT,
     pending             TEXT,
-    checklist           BIT
+    checklist           INTEGER
 )
 """)
 
@@ -46,7 +46,7 @@ for name in names:
     analysis = an.strftime("%d-%m-%Y")
 
     crt = an + timedelta(days=30)
-    certifiation = crt.strftime("%d-%m-%Y")
+    certification = crt.strftime("%d-%m-%Y")
 
     pend = ", ".join(ran.choices(pending_s, k=ran.randint(1, 3)))
 
@@ -57,7 +57,7 @@ for name in names:
     cursor.execute(
         """INSERT INTO kitchens (client, designer, analysis_date, certification_date, pending, checklist) 
             VALUES (?, ?, ?, ?, ?, ?)""",
-            (name, des, analysis, certifiation, pend, checklst)
+            (name, des, analysis, certification, pend, checklst)
                 )
 
 

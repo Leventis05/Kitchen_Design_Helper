@@ -41,8 +41,9 @@ class mdl_init_funcs:
 # Calling func((model, proxy), view)
 class vw_init_funcs:
     def main_init(tuple, view : QTableView):
-        model, proxy = tuple
+        __, proxy = tuple
         date_delegate = api.DateDelegate()
+        pending_delegate = api.PendingDelegate()
 
         view.setModel(proxy)
         view.resizeColumnsToContents()
@@ -50,6 +51,8 @@ class vw_init_funcs:
         view.setColumnHidden(0, True)
         view.setItemDelegateForColumn(3, date_delegate)
         view.setItemDelegateForColumn(4, date_delegate)
+
+        view.setItemDelegateForColumn(5, pending_delegate)
 
     def rem_short_init(tuple, view : QTableView):
         model, proxy = tuple
