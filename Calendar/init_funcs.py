@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from PyQt5.QtSql import QSqlTableModel
 from PyQt5.QtWidgets import QApplication, QVBoxLayout, QTableView, QMainWindow, QPushButton, QVBoxLayout, QWidget
+
+from PyQt5.QtWidgets import QComboBox
 from PyQt5.QtWidgets import QStyledItemDelegate, QDateEdit,  QLineEdit, QMessageBox, QTabWidget
 from PyQt5.QtCore import QDate, QSortFilterProxyModel, Qt
 from dataclasses import dataclass
@@ -41,18 +43,18 @@ class mdl_init_funcs:
 # Calling func((model, proxy), view)
 class vw_init_funcs:
     def main_init(tuple, view : QTableView):
-        __, proxy = tuple
-        date_delegate = api.DateDelegate()
-        pending_delegate = api.PendingDelegate()
+        test, proxy = tuple
+        view.date_delegate = api.DateDelegate()
+        view.pending_delegate = api.PendingDelegate()
 
         view.setModel(proxy)
         view.resizeColumnsToContents()
         view.horizontalHeader().setStretchLastSection(True)
         view.setColumnHidden(0, True)
-        view.setItemDelegateForColumn(3, date_delegate)
-        view.setItemDelegateForColumn(4, date_delegate)
+        view.setItemDelegateForColumn(3, view.date_delegate)
+        view.setItemDelegateForColumn(4, view.date_delegate)
 
-        view.setItemDelegateForColumn(5, pending_delegate)
+        view.setItemDelegateForColumn(5, view.pending_delegate)
 
     def rem_short_init(tuple, view : QTableView):
         model, proxy = tuple

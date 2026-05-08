@@ -20,7 +20,7 @@ desgn = [
     "Elqen custrahish", "Keanorin drathrerrann"
 ]
 
-pending_s = ["a", "b", "c"]
+pending_s = ["υλικά", "πάγκος", "συσκευές"]
 
 conn = sqlite3.connect("test.db")
 cursor = conn.cursor()
@@ -34,8 +34,7 @@ CREATE TABLE IF NOT EXISTS kitchens (
     designer            TEXT,
     analysis_date       TEXT,
     certification_date  TEXT,
-    pending             TEXT,
-    checklist           INTEGER
+    pending             TEXT
 )
 """)
 
@@ -55,9 +54,9 @@ for name in names:
     checklst = ran.choice([0, 1])
 
     cursor.execute(
-        """INSERT INTO kitchens (client, designer, analysis_date, certification_date, pending, checklist) 
-            VALUES (?, ?, ?, ?, ?, ?)""",
-            (name, des, analysis, certification, pend, checklst)
+        """INSERT INTO kitchens (client, designer, analysis_date, certification_date, pending) 
+            VALUES (?, ?, ?, ?, ?)""",
+            (name, des, analysis, certification, pend)
                 )
 
 
