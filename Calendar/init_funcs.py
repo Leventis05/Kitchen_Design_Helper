@@ -79,10 +79,10 @@ class lout_init_funcs:
         search.setPlaceholderText("Search...")
         search.textChanged.connect(lambda text: hks.on_text_changed(text, proxy))
 
-        add_tuple_btn = QPushButton("Add Row")
+        add_tuple_btn = QPushButton("Εισαγωγή Δεδομένων")
         add_tuple_btn.clicked.connect(lambda i: hks.add_row(model))
 
-        dltRowButton = QPushButton("Delete Row")
+        dltRowButton = QPushButton("Διαγραφή Γραμμής")
         dltRowButton.clicked.connect(lambda i: hks.delete_row(tuple, view))
         
         #CREATE TAB

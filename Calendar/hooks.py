@@ -11,14 +11,35 @@ from dataclasses import dataclass
 from typing import Optional
 import kapi as api
 import gui_class as kgui
+# from hooks import AddKitchenDialog
 
 # Main model
 def on_text_changed(text, proxy):
     proxy.setFilterWildcard(text)
 
-def add_row(model):
-    row = model.rowCount()
-    model.insertRow(row)
+# def add_row(model):
+#     row = model.rowCount()
+#     model.insertRow(row)
+
+def add_row(model, calendar_model=None, parent=None):
+    dialog = AddKitchenDialog()
+
+    if dialog.exec_() == dialog.Accepted:
+        data = dialog.get_data()
+
+        row = model.rowCount()
+        model.insertRow(row)
+
+        model.setData(model.index(row, 1), data["client"])
+        model.setData(model.index(row, 2), data["designer"])
+        model.setData(model.index(row, 3), data["analysis"])
+        model.setData(model.index(row, 4), data["cert"])
+        model.setData(model.index(row, 5), data["pending"])
+
+        model.submitAll()
+
+        if calendar_model:
+            calendar_model.select()
 
 def delete_row(tuple, view):
     model, proxy = tuple
@@ -187,7 +208,66 @@ deadlines = [
 
 self.mark_deadlines(deadlines)
 """
+
+
+class AddKitchenDialog(QDialog):
+    def __init__(self):
+        super().__init__()
+
+        self.setWindowTitle("Προσθήκη νέας σειράς")
+        self.resize(300, 200)
+
+        layout = QVBoxLayout()
+
+        self.client = QLineEdit()
+        self.client.setPlaceholderText("Ονοματεπώνυμο")
+
+        self.designer = QLineEdit()
+        self.designer.setPlaceholderText("Ονοματεπώνυμο")
+
+        self.analysis_date = QDateEdit()
+        self.analysis_date.setCalendarPopup(True)
+        self.analysis_date.setDate(QDate.currentDate())
+
+        self.cert_date = QDateEdit()
+        self.cert_date.setCalendarPopup(True)
+        self.cert_date.setDate(QDate.currentDate())
+
+        self.pending = api.CheckableComboBox()
+
+        self.save_btn = QPushButton("Save")
+
+        layout.addWidget(QLabel("Πελάτης"))
+        layout.addWidget(self.client)
+
+        layout.addWidget(QLabel("Σχεδιαστής"))
+        layout.addWidget(self.designer)
+
+        layout.addWidget(QLabel("Ημερομηνία Έγκρισης"))
+        layout.addWidget(self.analysis_date)
+
+        layout.addWidget(QLabel("Ημερομηνία Ανάλυσης"))
+        layout.addWidget(self.cert_date)
+
+        layout.addWidget(QLabel("Εκρεμμότητες"))
+        layout.addWidget(self.pending)
+
+        layout.addWidget(self.save_btn)
+
+        self.setLayout(layout)
+
+        self.save_btn.clicked.connect(self.accept)
+
+    def get_data(self):
+        return {
+            "client": self.client.text(),
+            "designer": self.designer.text(),
+            "analysis": self.analysis_date.date().toString("yyyy-MM-dd"),
+            "cert": self.cert_date.date().toString("yyyy-MM-dd"),
+            "pending": ", ".join(self.pending.get_checked_items())
+        }
+
+
 # COMMON
 def resize_columns(view):
     view.resizeColumnsToContents()
-
