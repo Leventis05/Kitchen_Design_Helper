@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 from PyQt5.QtSql import QSqlTableModel
-from PyQt5.QtWidgets import QApplication, QVBoxLayout, QTableView, QCalendarWidget, QPushButton, QVBoxLayout, QWidget
-from PyQt5.QtWidgets import QStyledItemDelegate, QDateEdit,  QLineEdit, QMessageBox, QTabWidget
+from PyQt5.QtWidgets import (
+    QApplication, QVBoxLayout, QTableView, QCalendarWidget, QPushButton, QVBoxLayout, 
+    QWidget, QStyledItemDelegate, QDateEdit,  QLineEdit, QMessageBox, QTabWidget,
+    QDialog, QLabel
+)
 from PyQt5.QtCore import QDate, QSortFilterProxyModel, Qt
 from PyQt5.QtGui import QTextCharFormat, QColor, QBrush
 from dataclasses import dataclass
@@ -36,7 +39,7 @@ def delete_row(tuple, view):
 # Reminders Short
 def update_badge(model : QSqlTableModel, tabs : QTabWidget):
     count = model.rowCount()
-    tabs.setTabText(1, f"Εγκρίσεις ({count})")
+    tabs.setTabText(1, f"Υπενθυμίσεις ({count})")
 
 def refresh_reminders_short(model : QSqlTableModel, tabs : Optional[QTabWidget] = None):
     today = QDate.currentDate()

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from PyQt5.QtSql import QSqlTableModel
-from PyQt5.QtWidgets import QApplication, QVBoxLayout, QTableView, QMainWindow, QPushButton, QVBoxLayout, QWidget
-
-from PyQt5.QtWidgets import QComboBox
-from PyQt5.QtWidgets import QStyledItemDelegate, QDateEdit,  QLineEdit, QMessageBox, QTabWidget
+from PyQt5.QtWidgets import (
+    QApplication, QVBoxLayout, QTableView, QMainWindow, QPushButton, 
+    QVBoxLayout, QWidget, QComboBox, QStyledItemDelegate, QDateEdit,  
+    QLineEdit, QMessageBox, QTabWidget
+)
 from PyQt5.QtCore import QDate, QSortFilterProxyModel, Qt
 from dataclasses import dataclass
 from typing import Optional
@@ -18,8 +19,8 @@ class mdl_init_funcs:
         model.setEditStrategy(QSqlTableModel.OnFieldChange)
         model.setHeaderData(1, Qt.Horizontal, "Ονοματεπώνυμο Πελάτη")
         model.setHeaderData(2, Qt.Horizontal, "Ονοματεπώνυμο Σχεδιαστή")
-        model.setHeaderData(3, Qt.Horizontal, "Ημερομηνία Αποδοχής")
-        model.setHeaderData(4, Qt.Horizontal, "Ημερομηνία Παράδοσης")
+        model.setHeaderData(3, Qt.Horizontal, "Ημερομηνία Έγκρισης")
+        model.setHeaderData(4, Qt.Horizontal, "Ημερομηνία Ανάλυσης")
         model.setHeaderData(5, Qt.Horizontal, "Εκκρεμότητες")
 
         proxy.setSourceModel(model)
@@ -30,8 +31,8 @@ class mdl_init_funcs:
         model.setTable(api.DB_MAIN_TABLE)
         model.setHeaderData(1, Qt.Horizontal, "Ονοματεπώνυμο Πελάτη")
         model.setHeaderData(2, Qt.Horizontal, "Ονοματεπώνυμο Σχεδιαστή")
-        model.setHeaderData(3, Qt.Horizontal, "Ημερομηνία Αποδοχής")
-        model.setHeaderData(4, Qt.Horizontal, "Ημερομηνία Παράδοσης")
+        model.setHeaderData(3, Qt.Horizontal, "Ημερομηνία Έγκρισης")
+        model.setHeaderData(4, Qt.Horizontal, "Ημερομηνία Ανάλυσης")
         model.setHeaderData(5, Qt.Horizontal, "Εκκρεμότητες")
         hks.refresh_reminders_short(model)
 

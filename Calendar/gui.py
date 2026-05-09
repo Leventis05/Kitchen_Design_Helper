@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import gui_class as kgui
 import init_funcs as init
 
-import db_api
+# import db_api
 
 class Keys:
     MAIN = "main"
@@ -36,7 +36,7 @@ def gui_insert_layouts(gui : kgui.K_GUI):
 
 def gui_insert_tabs(gui : kgui.K_GUI):
     gui.add_config_tab(MDL.MAIN, "Όλες οι δουλειές", TAB_CONFIGS.main_config)
-    gui.add_config_tab(MDL.REMINDERS_SHORT, "Εγκρίσεις", TAB_CONFIGS.rem_short_config)
+    gui.add_config_tab(MDL.REMINDERS_SHORT, "Υπενθυμίσεις", TAB_CONFIGS.rem_short_config)
     # gui.add_calendar()
     gui.add_calendar(
         init.hks.calendar_config,

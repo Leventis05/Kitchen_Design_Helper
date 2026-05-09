@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from PyQt5.QtSql import QSqlTableModel
-from PyQt5.QtWidgets import QApplication, QVBoxLayout, QTableView, QVBoxLayout, QWidget, QCalendarWidget
-from PyQt5.QtWidgets import QTabWidget
+from PyQt5.QtWidgets import (
+    QApplication, QVBoxLayout, QTableView, QVBoxLayout, QWidget, QCalendarWidget, QTabWidget
+)
 from PyQt5.QtCore import QSortFilterProxyModel
 from typing import Callable, Optional
 import kapi as api
