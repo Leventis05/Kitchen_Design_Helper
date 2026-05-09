@@ -76,7 +76,7 @@ class lout_init_funcs:
 
         #BUTTONS AND SEARCHBAR
         search = QLineEdit()
-        search.setPlaceholderText("Search...")
+        search.setPlaceholderText("Αναζήτηση...")
         search.textChanged.connect(lambda text: hks.on_text_changed(text, proxy))
 
         add_tuple_btn = QPushButton("Εισαγωγή Δεδομένων")

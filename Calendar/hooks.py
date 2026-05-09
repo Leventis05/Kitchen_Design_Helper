@@ -11,7 +11,6 @@ from dataclasses import dataclass
 from typing import Optional
 import kapi as api
 import gui_class as kgui
-# from hooks import AddKitchenDialog
 
 # Main model
 def on_text_changed(text, proxy):
@@ -45,10 +44,12 @@ def delete_row(tuple, view):
     model, proxy = tuple
     reply = QMessageBox.question(
         None,
-        "Delete",
-        "Are you sure?",
+        "Διαγραφή γραμμής",
+        "Σίγουρα;",
         QMessageBox.Yes | QMessageBox.No
     )
+    if reply is None or reply == QMessageBox.No:
+        return
     p_index = view.currentIndex()
     s_index = proxy.mapToSource(p_index)
     if s_index.isValid():
