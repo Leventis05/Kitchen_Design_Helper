@@ -2,6 +2,8 @@
 from dataclasses import dataclass
 import gui_class as kgui
 import init_funcs as init
+import hooks as hks
+import kapi as api
 
 # import db_api
 
@@ -23,7 +25,11 @@ TAB_CONFIGS = init.tab_config_funcs
 # TODO add rem long
 def gui_insert_models(gui : kgui.K_GUI):
     gui.add_init_model(MDL.MAIN, MDL_INIT.main_init, True)
-    gui.add_init_model(MDL.REMINDERS_SHORT, MDL_INIT.rem_short_init)
+    gui.add_init_model(
+                       MDL.REMINDERS_SHORT,
+                       MDL_INIT.rem_short_init,
+                       model=kgui.DeadlineModel(api.columns.ANALYSIS_DATE.value)
+                    )
     
 
 def gui_insert_views(gui : kgui.K_GUI):
@@ -39,7 +45,7 @@ def gui_insert_tabs(gui : kgui.K_GUI):
     gui.add_config_tab(MDL.REMINDERS_SHORT, "Υπενθυμίσεις", TAB_CONFIGS.rem_short_config)
     # gui.add_calendar()
     gui.add_calendar(
-        init.hks.calendar_config,
+        hks.calendar_config,
         gui.calendar_model
     )
 

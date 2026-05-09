@@ -19,8 +19,8 @@ class mdl_init_funcs:
         model.setEditStrategy(QSqlTableModel.OnFieldChange)
         model.setHeaderData(1, Qt.Horizontal, "Ονοματεπώνυμο Πελάτη")
         model.setHeaderData(2, Qt.Horizontal, "Ονοματεπώνυμο Σχεδιαστή")
-        model.setHeaderData(3, Qt.Horizontal, "Ημερομηνία Έγκρισης")
-        model.setHeaderData(4, Qt.Horizontal, "Ημερομηνία Ανάλυσης")
+        model.setHeaderData(3, Qt.Horizontal, "Ημερομηνία Ανάλυσης")
+        model.setHeaderData(4, Qt.Horizontal, "Ημερομηνία Έγκρισης")
         model.setHeaderData(5, Qt.Horizontal, "Εκκρεμότητες")
 
         proxy.setSourceModel(model)
@@ -31,8 +31,8 @@ class mdl_init_funcs:
         model.setTable(api.DB_MAIN_TABLE)
         model.setHeaderData(1, Qt.Horizontal, "Ονοματεπώνυμο Πελάτη")
         model.setHeaderData(2, Qt.Horizontal, "Ονοματεπώνυμο Σχεδιαστή")
-        model.setHeaderData(3, Qt.Horizontal, "Ημερομηνία Έγκρισης")
-        model.setHeaderData(4, Qt.Horizontal, "Ημερομηνία Ανάλυσης")
+        model.setHeaderData(3, Qt.Horizontal, "Ημερομηνία Ανάλυσης")
+        model.setHeaderData(4, Qt.Horizontal, "Ημερομηνία Έγκρισης")
         model.setHeaderData(5, Qt.Horizontal, "Εκκρεμότητες")
         hks.refresh_reminders_short(model)
 

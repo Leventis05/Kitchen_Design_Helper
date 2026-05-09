@@ -73,9 +73,55 @@ def refresh_reminders_short(model : QSqlTableModel, tabs : Optional[QTabWidget] 
     columns = api.columns
     col = api.DB_TABLE_COL[columns.CERT_DATE]
     model.setFilter(f"{col} BETWEEN '{start}' AND '{end}'")
-
-    model.setFilter(f"{col} BETWEEN '{start}' AND '{end}'")
     model.select()
+
+    for row in range(model.rowCount()):
+        record = model.record(row)
+
+        date_str = record.value(col)
+
+        deadline = QDate.fromString(date_str, api.DB_FORMAT)
+
+        if not deadline.isValid():
+            continue
+
+        days_left = today.daysTo(deadline)
+
+        for column in range(model.columnCount()):
+            index = model.index(row, column)
+
+        if days_left <= 1:
+
+            model.setData(
+                index,
+                QBrush(QColor("red")),
+                Qt.BackgroundRole
+            )
+
+            model.setData(
+                index,
+                QBrush(QColor("white")),
+                Qt.ForegroundRole
+            )
+
+        elif days_left <= 2:
+
+            model.setData(
+                index,
+                QBrush(QColor("orange")),
+                Qt.BackgroundRole
+            )
+
+            model.setData(
+                index,
+                QBrush(QColor("black")),
+                Qt.ForegroundRole
+            )
+
+    model.dataChanged.emit(
+    model.index(0,0),
+    model.index(model.rowCount()-1, model.columnCount()-1)
+)
     if tabs:
         update_badge(model, tabs)
 
@@ -101,17 +147,23 @@ def construct_string_from_record(record):
     
     return f"{client} - {designer} - {a_date} - {c_date} - {pending}"
 
-def get_calendar_deadlines(date, calendar, model):
-    str_date = date.toString(api.DB_FORMAT)
+def get_calendar_deadlines(date : QDate, calendar, model):
+    certDate_start = date.addDays(-30)
+    certDate_end = date.addDays(-28)
+    str_start = certDate_start.toString(api.DB_FORMAT)
+    str_end = certDate_end.toString(api.DB_FORMAT)
+                 
+                
 
     # save current filter
     old_filter = model.filter()
 
     # temporary filter
-    model.setFilter(
-        f"{api.DB_TABLE_COL[api.columns.CERT_DATE]} = '{str_date}'"
-    )
+    columns = api.columns
+    col = api.DB_TABLE_COL[columns.CERT_DATE]
+    pend_col = api.DB_TABLE_COL[api.columns.PENDING_ITEMS]
 
+    model.setFilter(f"{col} BETWEEN '{str_start}' AND '{str_end}' AND NOT {pend_col} = ''")
     model.select()
 
     deadlines = []
@@ -143,6 +195,7 @@ def refresh_calendar_deadlines(calendar, model):
     today = QDate.currentDate()
 
     cert_col = api.DB_TABLE_COL[api.columns.CERT_DATE]
+    pend_col = api.DB_TABLE_COL[api.columns.PENDING_ITEMS]
 
     # IMPORTANT:
     # save current filter
@@ -156,6 +209,10 @@ def refresh_calendar_deadlines(calendar, model):
 
         record = model.record(row)
 
+        pend = record.value(pend_col)
+        if not pend:
+            continue
+
         date_str = record.value(cert_col)
 
         deadline = QDate.fromString(date_str, api.DB_FORMAT)
@@ -163,6 +220,8 @@ def refresh_calendar_deadlines(calendar, model):
         if not deadline.isValid():
             continue
 
+        # build long deadline
+        deadline = deadline.addDays(30)
         days_left = today.daysTo(deadline)
 
         fmt = QTextCharFormat()
@@ -188,8 +247,6 @@ def refresh_calendar_deadlines(calendar, model):
     model.setFilter(old_filter)
     model.select()
 
-# def calendar_config(calendar : QCalendarWidget, model : QSqlTableModel):
-#     calendar.clicked.connect(lambda date : get_calendar_deadlines(date, calendar, model))
 
 def calendar_config(calendar, model):
     refresh_calendar_deadlines(calendar, model)
@@ -198,17 +255,6 @@ def calendar_config(calendar, model):
         lambda date: get_calendar_deadlines(date, calendar, model)
     )
 
-"""
-from PyQt5.QtCore import QDate
-
-deadlines = [
-    QDate(2026, 5, 10),
-    QDate(2026, 5, 12),
-    QDate(2026, 5, 20),
-]
-
-self.mark_deadlines(deadlines)
-"""
 
 
 class AddKitchenDialog(QDialog):
@@ -244,10 +290,10 @@ class AddKitchenDialog(QDialog):
         layout.addWidget(QLabel("Σχεδιαστής"))
         layout.addWidget(self.designer)
 
-        layout.addWidget(QLabel("Ημερομηνία Έγκρισης"))
+        layout.addWidget(QLabel("Ημερομηνία Ανάλυσης"))
         layout.addWidget(self.analysis_date)
 
-        layout.addWidget(QLabel("Ημερομηνία Ανάλυσης"))
+        layout.addWidget(QLabel("Ημερομηνία Έγκρισης"))
         layout.addWidget(self.cert_date)
 
         layout.addWidget(QLabel("Εκρεμμότητες"))
