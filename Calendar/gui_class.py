@@ -15,6 +15,11 @@ class K_GUI:
         self.models = {}
         self.views = {}
         self.layouts = {}
+
+        # dedicated calendar model
+        self.calendar_model = QSqlTableModel()
+        self.calendar_model.setTable(api.DB_MAIN_TABLE)
+        self.calendar_model.select()
     
     def add_init_model(self, name : str, initFunc : Callable, proxy : bool = False):
         model = QSqlTableModel()
@@ -43,7 +48,8 @@ class K_GUI:
         # Calling func(model_tuple, vw_lout_tuple, tab, index)
         configFunc(self.models[name], (self.views[name], self.layouts[name]), self.tabs)
 
-    def add_calendar(self, configFunc : Optional[Callable] = None):
+    # def add_calendar(self, configFunc: Optional[Callable] = None):
+    def add_calendar(self, configFunc=None, model=None):
         self.calendar_tab = QWidget()
         self.calendar_layout = QVBoxLayout(self.calendar_tab)
 
@@ -51,6 +57,9 @@ class K_GUI:
         self.calendar_layout.addWidget(self.calendar)
 
         self.tabs.addTab(self.calendar_tab, "Ημερολόγιο")
+
+        if configFunc:
+            configFunc(self.calendar, model)
 
     def exec(self):
         self.tabs.resize(1000, 700)

@@ -48,10 +48,12 @@ cursor.execute("DELETE FROM kitchens")  # reset data (optional)
 
 for name in names:
     an = radar.random_datetime()
-    analysis = an.strftime("%d-%m-%Y")
+    # analysis = an.strftime("%d-%m-%Y") PROBLEMS WITH FILTERING DATES
+    analysis = an.strftime("%Y-%m-%d")
 
     crt = an + timedelta(days=30)
-    certification = crt.strftime("%d-%m-%Y")
+    # certification = crt.strftime("%d-%m-%Y") PROBLEMS WITH FILTERING DATES
+    certification = crt.strftime("%Y-%m-%d")
 
     pend = ", ".join(ran.choices(pending_s, k=ran.randint(1, 3)))
 

@@ -76,20 +76,32 @@ def construct_string_from_record(record):
     
     return f"{client} - {designer} - {a_date} - {c_date} - {pending}"
 
-def get_calendar_deadlines(date : QDate, calendar : QCalendarWidget, model : QSqlTableModel):
+def get_calendar_deadlines(date, calendar, model):
     str_date = date.toString(api.DB_FORMAT)
 
-    model.setFilter(f"{api.DB_TABLE_COL[api.columns.CERT_DATE]} = '{str_date}")
+    # save current filter
+    old_filter = model.filter()
+
+    # temporary filter
+    model.setFilter(
+        f"{api.DB_TABLE_COL[api.columns.CERT_DATE]} = '{str_date}'"
+    )
+
     model.select()
 
     deadlines = []
+
     for row in range(model.rowCount()):
         record = model.record(row)
         deadlines.append(construct_string_from_record(record))
 
+    # RESTORE ORIGINAL FILTER
+    model.setFilter(old_filter)
+    model.select()
+
     if not deadlines:
         return
-    
+
     msg = "\n".join(deadlines)
 
     QMessageBox.information(
@@ -98,13 +110,68 @@ def get_calendar_deadlines(date : QDate, calendar : QCalendarWidget, model : QSq
         msg
     )
 
-    
-    
+def refresh_calendar_deadlines(calendar, model):
 
-def calendar_config(calendar : QCalendarWidget, model : QSqlTableModel):
-    calendar.clicked.connect(lambda date : get_calendar_deadlines(date, calendar, model))
+    # clear previous formatting
+    calendar.setDateTextFormat(QDate(), QTextCharFormat())
 
-    
+    today = QDate.currentDate()
+
+    cert_col = api.DB_TABLE_COL[api.columns.CERT_DATE]
+
+    # IMPORTANT:
+    # save current filter
+    old_filter = model.filter()
+
+    # temporarily remove ALL filters
+    model.setFilter("")
+    model.select()
+
+    for row in range(model.rowCount()):
+
+        record = model.record(row)
+
+        date_str = record.value(cert_col)
+
+        deadline = QDate.fromString(date_str, api.DB_FORMAT)
+
+        if not deadline.isValid():
+            continue
+
+        days_left = today.daysTo(deadline)
+
+        fmt = QTextCharFormat()
+
+        # RED -> 24h or overdue
+        if days_left <= 1:
+            fmt.setBackground(QBrush(QColor("red")))
+            fmt.setForeground(QBrush(QColor("white")))
+
+        # ORANGE -> 48h
+        elif days_left <= 2:
+            fmt.setBackground(QBrush(QColor("orange")))
+            fmt.setForeground(QBrush(QColor("black")))
+
+        else:
+            continue
+
+        fmt.setFontWeight(75)
+
+        calendar.setDateTextFormat(deadline, fmt)
+
+    # restore original filter
+    model.setFilter(old_filter)
+    model.select()
+
+# def calendar_config(calendar : QCalendarWidget, model : QSqlTableModel):
+#     calendar.clicked.connect(lambda date : get_calendar_deadlines(date, calendar, model))
+
+def calendar_config(calendar, model):
+    refresh_calendar_deadlines(calendar, model)
+
+    calendar.clicked.connect(
+        lambda date: get_calendar_deadlines(date, calendar, model)
+    )
 
 """
 from PyQt5.QtCore import QDate

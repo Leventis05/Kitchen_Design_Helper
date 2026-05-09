@@ -37,7 +37,11 @@ def gui_insert_layouts(gui : kgui.K_GUI):
 def gui_insert_tabs(gui : kgui.K_GUI):
     gui.add_config_tab(MDL.MAIN, "Όλες οι δουλειές", TAB_CONFIGS.main_config)
     gui.add_config_tab(MDL.REMINDERS_SHORT, "Εγκρίσεις", TAB_CONFIGS.rem_short_config)
-    gui.add_calendar()
+    # gui.add_calendar()
+    gui.add_calendar(
+        init.hks.calendar_config,
+        gui.calendar_model
+    )
 
 # MAIN
 def main():
