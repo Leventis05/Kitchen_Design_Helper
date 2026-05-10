@@ -2,7 +2,13 @@ from PyQt5.QtSql import QSqlDatabase, QSqlTableModel
 from PyQt5.QtWidgets import QStyledItemDelegate, QDateEdit,  QComboBox
 from PyQt5.QtCore import QDate, QSortFilterProxyModel, Qt
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
+from PyQt5.QtWidgets import QApplication, QDialog, QLabel, QVBoxLayout
 from enum import Enum
+import json
+from pathlib import Path
+import db_wizard as wiz
+import sys
+import sqlite3
 
 DB_FORMAT = "yyyy-MM-dd"
 UI_FORMAT = "dd-MM-yyyy"
@@ -46,9 +52,16 @@ DB_COL_LABELS = {
 
 class database:
     def __init__(self):
+        if not Path("config.json").exists():
+            if do_db_setup():
+                sys.exit()
+
+        with open("config.json", "r") as f:
+            config = json.load(f)
+            
         self.db = QSqlDatabase.addDatabase(DB_T)
         self.db.setConnectOptions(DB_OPTIONS)
-        self.db.setDatabaseName(DB_NAME)
+        self.db.setDatabaseName(config["db_path"])
         self.db.open()
 
 
@@ -130,3 +143,36 @@ class PendingDelegate(QStyledItemDelegate):
     def setModelData(self, editor, model, index):
         values = editor.get_checked_items()
         model.setData(index, ", ".join(values))
+
+
+def do_db_setup() -> bool:
+    dialog = wiz.SetupDialog()
+    if dialog.exec_():
+        db_name = dialog.get_db_name() + ".db"
+        config = {
+            "db_path": db_name
+        }
+        with open("config.json", "w") as f:
+            json.dump(config, f)
+        create_db(db_name)
+        return False
+    else:
+        return True
+
+def create_db(name):
+    conn = sqlite3.connect(str(name))
+    cursor = conn.cursor()
+    cursor.execute(
+    """
+        CREATE TABLE IF NOT EXISTS kitchens (
+        id              INTEGER PRIMARY KEY AUTOINCREMENT,
+        client              TEXT,
+        designer            TEXT,
+        analysis_date       TEXT,
+        certification_date  TEXT,
+        pending             TEXT
+    )
+    """
+    )
+    conn.commit()
+    conn.close()

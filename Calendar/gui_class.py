@@ -101,7 +101,7 @@ class DeadlineModel(QSqlTableModel):
 
         today = QDate.currentDate()
 
-        deadline = deadline.addDays(2)
+        deadline = deadline.addDays(3)
         days_left = today.daysTo(deadline)
 
         # RED rows

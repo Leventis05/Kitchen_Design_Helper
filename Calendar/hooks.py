@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import (
     QWidget, QStyledItemDelegate, QDateEdit,  QLineEdit, QMessageBox, QTabWidget,
     QDialog, QLabel
 )
-from PyQt5.QtCore import QDate, QSortFilterProxyModel, Qt
+from PyQt5.QtCore import QDate, QSortFilterProxyModel, Qt, QVariant
 from PyQt5.QtGui import QTextCharFormat, QColor, QBrush
 from dataclasses import dataclass
 from typing import Optional
@@ -65,65 +65,19 @@ def update_badge(model : QSqlTableModel, tabs : QTabWidget):
 
 def refresh_reminders_short(model : QSqlTableModel, tabs : Optional[QTabWidget] = None):
     today = QDate.currentDate()
-    two_days_later = today.addDays(2)
+    two_days_erlier = today.addDays(-2)
 
-    start = today.toString("yyyy-MM-dd")
-    end = two_days_later.toString("yyyy-MM-dd")
+    start = two_days_erlier.toString("yyyy-MM-dd")
+    end = today.addDays(-1).toString("yyyy-MM-dd")
 
     columns = api.columns
-    col = api.DB_TABLE_COL[columns.CERT_DATE]
+    col = api.DB_TABLE_COL[columns.ANALYSIS_DATE]
     model.setFilter(f"{col} BETWEEN '{start}' AND '{end}'")
     model.select()
-
-    for row in range(model.rowCount()):
-        record = model.record(row)
-
-        date_str = record.value(col)
-
-        deadline = QDate.fromString(date_str, api.DB_FORMAT)
-
-        if not deadline.isValid():
-            continue
-
-        days_left = today.daysTo(deadline)
-
-        for column in range(model.columnCount()):
-            index = model.index(row, column)
-
-        if days_left <= 1:
-
-            model.setData(
-                index,
-                QBrush(QColor("red")),
-                Qt.BackgroundRole
-            )
-
-            model.setData(
-                index,
-                QBrush(QColor("white")),
-                Qt.ForegroundRole
-            )
-
-        elif days_left <= 2:
-
-            model.setData(
-                index,
-                QBrush(QColor("orange")),
-                Qt.BackgroundRole
-            )
-
-            model.setData(
-                index,
-                QBrush(QColor("black")),
-                Qt.ForegroundRole
-            )
-
-    model.dataChanged.emit(
-    model.index(0,0),
-    model.index(model.rowCount()-1, model.columnCount()-1)
-)
     if tabs:
         update_badge(model, tabs)
+
+    
 
 def mark_deadlines(self, dates):
     """
